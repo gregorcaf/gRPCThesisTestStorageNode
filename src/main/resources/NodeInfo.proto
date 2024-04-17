@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "si.mlimedija.proto";
+
+service nodeInfo {
+
+  rpc getNodeInfo(NodeInfoRequest) returns (NodeInfoResponse);
+
+}
+
+// get storage node's info status => request
+message NodeInfoRequest {
+  int32 nodeId = 1;
+  string nodeIpAddress = 2;
+}
+
+// get storage node's info status => response
+message NodeInfoResponse {
+  int32 nodeId = 1;
+  string nodeIpAddress = 2;
+  bool isHealthy = 3;
+  int32 mapSize = 4;
+  int32 responseCode = 5;
+  string responseMessage = 6;
+}

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "si.mlimedija.proto";
+
+service storage {
+
+  rpc putDataNode(PutDataNodeRequest) returns (PutDataNodeResponse);
+
+  rpc getDataNode(GetDataNodeRequest) returns (GetDataNodeResponse);
+}
+
+message PutDataNodeRequest {
+  int32 nodeId = 1;
+  string key = 2;
+  string value = 3;
+}
+
+message PutDataNodeResponse {
+  string key = 1;
+  int32 responseCode = 2;
+  string responseMessage = 3;
+}
+
+message GetDataNodeRequest {
+  int32 nodeId = 1;
+  string key = 2;
+}
+
+message GetDataNodeResponse {
+  string key = 1;
+  string value = 2;
+  int32 responseCode = 3;
+  string responseMessage = 4;
+}
