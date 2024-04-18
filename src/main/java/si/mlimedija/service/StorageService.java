@@ -1,10 +1,14 @@
 package si.mlimedija.service;
 
 import io.grpc.stub.StreamObserver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import si.mlimedija.proto.*;
 import java.util.HashMap;
 
 public class StorageService extends storageGrpc.storageImplBase {
+
+    private static final Logger logger = LoggerFactory.getLogger(StorageService.class.getSimpleName());
 
     private HashMap<String, String> dataMap = new HashMap<>();
 
@@ -18,7 +22,7 @@ public class StorageService extends storageGrpc.storageImplBase {
         String key = request.getKey();
         String value = request.getValue();
 
-        System.out.println("PUT_DATA_NODE request: nodeId=" + nodeId + "|key=" + key + "|value=" + value);
+        logger.info("PUT_DATA_NODE request: nodeId=" + nodeId + "|key=" + key + "|value=" + value);
 
         PutDataNodeResponse.Builder response = PutDataNodeResponse.newBuilder();
         response.setKey(key);
@@ -33,7 +37,6 @@ public class StorageService extends storageGrpc.storageImplBase {
             response.setResponseCode(400);
             response.setResponseMessage("PUT_DATA_NODE fail | error=" + e.getMessage());
         }
-
         responseObserver.onNext(response.build());
         responseObserver.onCompleted();
     }
@@ -45,7 +48,7 @@ public class StorageService extends storageGrpc.storageImplBase {
         int nodeId = request.getNodeId();
         String key = request.getKey();
 
-        System.out.println("GET_DATA_NODE request: nodeId=" + nodeId + "|key=" + key);
+        logger.info("GET_DATA_NODE request: nodeId=" + nodeId + "|key=" + key);
 
         GetDataNodeResponse.Builder response = GetDataNodeResponse.newBuilder();
         response.setKey(key);
@@ -61,7 +64,6 @@ public class StorageService extends storageGrpc.storageImplBase {
             response.setResponseCode(400);
             response.setResponseMessage("GET_DATA_NODE fail | error=" + e.getMessage());
         }
-
         responseObserver.onNext(response.build());
         responseObserver.onCompleted();
     }

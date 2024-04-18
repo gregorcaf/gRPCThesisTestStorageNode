@@ -1,19 +1,21 @@
 package si.mlimedija.service;
 
 import io.grpc.stub.StreamObserver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import si.mlimedija.proto.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-
 public class NodeInfoService extends nodeInfoGrpc.nodeInfoImplBase {
+
+    private static final Logger logger = LoggerFactory.getLogger(NodeInfoService.class.getSimpleName());
 
     private StorageService storageService;
 
     public NodeInfoService(StorageService storageService) {
         this.storageService = storageService;
     }
-
 
     // TODO => retrieve CPU utilization % from the system and return it in response
     @Override
@@ -23,7 +25,7 @@ public class NodeInfoService extends nodeInfoGrpc.nodeInfoImplBase {
         int nodeId = request.getNodeId();
         String nodeIpAddress = request.getNodeIpAddress();
 
-        System.out.println("GET_NODE_INFO request: nodeId=" + nodeId + "|nodeIpAddress=" + nodeIpAddress);
+        logger.info("GET_NODE_INFO request: nodeId=" + nodeId + "|nodeIpAddress=" + nodeIpAddress);
 
         NodeInfoResponse.Builder response = NodeInfoResponse.newBuilder();
         response.setNodeId(nodeId);
@@ -42,7 +44,6 @@ public class NodeInfoService extends nodeInfoGrpc.nodeInfoImplBase {
             response.setResponseCode(400);
             response.setResponseMessage("GET_NODE_INFO success");
         }
-
         responseObserver.onNext(response.build());
         responseObserver.onCompleted();
     }
@@ -56,5 +57,4 @@ public class NodeInfoService extends nodeInfoGrpc.nodeInfoImplBase {
             return null; // Handle the error gracefully
         }
     }
-
 }

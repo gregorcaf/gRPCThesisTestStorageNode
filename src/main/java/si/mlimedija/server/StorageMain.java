@@ -4,12 +4,15 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import si.mlimedija.service.NodeInfoService;
 import si.mlimedija.service.StorageService;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 public class StorageMain {
+
+    private static final Logger logger = LoggerFactory.getLogger(StorageMain.class.getSimpleName());
 
     public static void main(String[] args) throws InterruptedException, IOException {
         StorageService storageService = new StorageService();
@@ -19,12 +22,12 @@ public class StorageMain {
                 addService(storageService).
                 addService(nodeInfoService).build();
 
-        System.out.println("Starting gRPC server");
+        logger.info("Starting gRPC server");
 
         server.start();
 
         String ipAddress = getIPAddress();
-        System.out.println("Server started at " + ipAddress + ":" + server.getPort());
+        logger.info("Server started at " + ipAddress + ":" + server.getPort());
 
         server.awaitTermination();
     }
