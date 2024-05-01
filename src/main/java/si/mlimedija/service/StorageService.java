@@ -5,12 +5,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import si.mlimedija.proto.*;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StorageService extends storageGrpc.storageImplBase {
 
     private static final Logger logger = LoggerFactory.getLogger(StorageService.class.getSimpleName());
 
-    private HashMap<String, String> dataMap = new HashMap<>();
+    private ConcurrentHashMap<String, String> dataMap = new ConcurrentHashMap<>();
 
     public int getMapSize() {
         return dataMap.size();
@@ -22,7 +23,18 @@ public class StorageService extends storageGrpc.storageImplBase {
         String key = request.getKey();
         String value = request.getValue();
 
-        logger.info("PUT_DATA_NODE request: nodeId=" + nodeId + "|key=" + key + "|value=" + value);
+        // for testing purposes -> simulates delay
+//        try {
+//            // Sleep for 6 seconds to exceed the client's deadline of 20 seconds
+//            logger.info("Sleep start");
+//            Thread.sleep(5000);
+//            logger.info("Sleep end");
+//        } catch (InterruptedException e) {
+//            // Handle interrupted exception
+//            e.printStackTrace();
+//        }
+
+        logger.info("PUT_DATA_NODE request: key=" + key + "|value=" + value + "|nodeId=" + nodeId);
 
         PutDataNodeResponse.Builder response = PutDataNodeResponse.newBuilder();
         response.setKey(key);

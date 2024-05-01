@@ -17,44 +17,34 @@ public class NodeInfoService extends nodeInfoGrpc.nodeInfoImplBase {
         this.storageService = storageService;
     }
 
-    // TODO => retrieve CPU utilization % from the system and return it in response
     @Override
     public void getNodeInfo(NodeInfoRequest request, StreamObserver<NodeInfoResponse> responseObserver) {
 
-        // extract server request
+        // extract data from server request
         int nodeId = request.getNodeId();
-        String nodeIpAddress = request.getNodeIpAddress();
 
-        logger.info("GET_NODE_INFO request: nodeId=" + nodeId + "|nodeIpAddress=" + nodeIpAddress);
+        logger.info("GET_NODE_INFO request: nodeId=" + nodeId);
 
         NodeInfoResponse.Builder response = NodeInfoResponse.newBuilder();
         response.setNodeId(nodeId);
 
-        // TODO => make smaller try-catch blocks for each response separately
+        // TODO => retrieve CPU utilization
+
         try {
-            response.setNodeIpAddress(getIPAddress());
-            response.setIsHealthy(true);
             response.setMapSize(storageService.getMapSize());
+            response.setIsHealthy(true);
             response.setResponseCode(200);
             response.setResponseMessage("GET_NODE_INFO success");
+            logger.info("nodeId=" + nodeId + "|isHealthy=" + true + "|mapSize=" + storageService.getMapSize());
         } catch (Exception e) {
-            response.setNodeIpAddress(nodeIpAddress);
-            response.setIsHealthy(false);
             response.setMapSize(-1);
+            response.setIsHealthy(false);
             response.setResponseCode(400);
-            response.setResponseMessage("GET_NODE_INFO success");
+            response.setResponseMessage("GET_NODE_INFO fail | error=" + e.getMessage());
+            logger.warn("Can't fetch map size");
         }
+
         responseObserver.onNext(response.build());
         responseObserver.onCompleted();
-    }
-
-    public static String getIPAddress() {
-        try {
-            InetAddress address = InetAddress.getLocalHost();
-            return address.getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            return null; // Handle the error gracefully
-        }
     }
 }

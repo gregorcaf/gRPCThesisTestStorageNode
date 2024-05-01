@@ -20,7 +20,8 @@ public class StorageMain {
 
         Server server = ServerBuilder.forPort(9070).
                 addService(storageService).
-                addService(nodeInfoService).build();
+                addService(nodeInfoService).
+                build();
 
         logger.info("Starting gRPC server");
 
