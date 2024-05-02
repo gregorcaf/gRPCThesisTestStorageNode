@@ -27,13 +27,13 @@ public class StorageMain {
 
         server.start();
 
-        String ipAddress = getIPAddress();
+        String ipAddress = getIpAddress();
         logger.info("Server started at " + ipAddress + ":" + server.getPort());
 
         server.awaitTermination();
     }
 
-    public static String getIPAddress() {
+    public static String getIpAddress() {
         try {
             InetAddress address = InetAddress.getLocalHost();
             return address.getHostAddress();
