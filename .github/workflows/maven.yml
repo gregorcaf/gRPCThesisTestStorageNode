@@ -47,7 +47,7 @@ jobs:
       - name: Build Container image
         run: docker build -t ${{ secrets.DOCKER_REPO }}:storage .
       - name: Publish Docker image
-        run: docker push ${{ secrets.DOCKER_REPO }}
+        run: docker push ${{ secrets.DOCKER_REPO }}:storage
 
 #  publish-job:
 #    runs-on: ubuntu-latest
